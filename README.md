@@ -91,6 +91,21 @@ Newton's laws of motion · Aerodynamic drag modelling
 - `rocket_2d.py` - 2D trajectory with launch angle
 - `parametric_study.py` - range vs angle parametric study
 
+## ISA Atmosphere Upgrade
+
+Extended simulation with International Standard 
+Atmosphere density model — density now varies 
+with altitude instead of constant sea-level value.
+
+| Version | Peak Altitude | Notes |
+|---------|--------------|-------|
+| Constant density (rho=1.225) | 2958.8 m | Sea level density throughout |
+| ISA variable density | 2974.8 m | Density decreases with altitude |
+
+**Result:** +16m higher with ISA model — thinner air 
+at altitude means less drag and slightly higher peak.
+Effect increases significantly for higher-altitude rockets.
+
 ## Connection to Project 1
 Project 1 solved a control problem - how to maintain 
 a target altitude using PID feedback. Project 2 solves 

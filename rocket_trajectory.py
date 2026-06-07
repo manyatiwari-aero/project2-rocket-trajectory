@@ -1,6 +1,7 @@
 from scipy.integrate import solve_ivp
 import numpy as np
 import matplotlib.pyplot as plt
+from isa_atmosphere import isa_atmosphere
 
 #Rocket parameters
 mass = 500 # kg
@@ -23,6 +24,8 @@ def rocket(t, y):
         T = 0
     
     #Drag always opposes the motion
+    _, _, rho_array = isa_atmosphere(max(0, altitude))
+    rho = float(rho_array[0])
     drag = 0.5 * rho * velocity**2 * Cd * A
     if velocity < 0:
         drag = -drag
@@ -37,7 +40,14 @@ y0     = [0, 0]                        # starts at 0m, 0 m/s
 t_span = (0, 60)                       # simulate 60 seconds
 t_eval = np.linspace(0, 60, 1000)     # 1000 time points
 
-sol = solve_ivp(rocket, t_span, y0, t_eval=t_eval)
+def hit_ground(t, y):
+    return y[0]  # altitude — stops when = 0
+
+hit_ground.terminal  = True   # stop simulation
+hit_ground.direction = -1     # only when falling
+
+sol = solve_ivp(rocket, t_span, y0,
+                t_eval=t_eval, events=hit_ground)
 
 # ── Plot results ───────────────────────────────────
 fig, axes = plt.subplots(1, 2, figsize=(10, 5))
